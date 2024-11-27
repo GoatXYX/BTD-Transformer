@@ -5,7 +5,7 @@ if [ "$1" == "train" ]; then
     pwd
     python train_upload.py \
         --cuda \
-        --data /home/xyx/projects/The-compression-of-Transformer/BTD-Transformer/data/ptb \
+        --data /home/yuxuanxia/BTD-Transformer/data/ptb \
         --dataset ptb \
         --n_layer 3 \
         --d_model 256 \

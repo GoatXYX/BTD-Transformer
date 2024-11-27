@@ -1,6 +1,6 @@
 # copy from https://github.com/kimiyoung/transformer-xl
-from log_uniform_sampler import LogUniformSampler, sample_logits
-from proj_adaptive_softmax import ProjectedAdaptiveLogSoftmax
+from utils.log_uniform_sampler import LogUniformSampler, sample_logits
+from utils.proj_adaptive_softmax import ProjectedAdaptiveLogSoftmax
 import sys
 
 import torch
@@ -74,7 +74,7 @@ class PositionwiseFF(nn.Module):
 
 class MultiLinearAttn(nn.Module):
     def __init__(self, n_head, d_model, d_head, dropout, dropatt=0,
-                 tgt_len=30, ext_len=None, mem_len=None, pre_lnorm=False, rand=None, core_nums=1):
+                 tgt_len=30, ext_len=None, mem_len=None, pre_lnorm=False, rand=None, core_nums=2):
         super(MultiLinearAttn, self).__init__()
 
         self.n_head = n_head
