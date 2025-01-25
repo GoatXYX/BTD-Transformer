@@ -1,0 +1,151 @@
+====================================================================================================
+    - data : /home/yuxuanxia/BTD-Transformer/data/ptb
+    - dataset : ptb
+    - n_layer : 2
+    - n_head : 1
+    - d_head : 32
+    - d_embed : 128
+    - d_model : 128
+    - d_inner : 1024
+    - dropout : 0.3
+    - dropatt : 0.0
+    - init : normal
+    - emb_init : normal
+    - init_range : 0.1
+    - emb_init_range : 0.01
+    - init_std : 0.02
+    - proj_init_std : 0.01
+    - optim : adam
+    - lr : 0.00025
+    - mom : 0.0
+    - scheduler : cosine
+    - warmup_step : 0
+    - decay_rate : 0.5
+    - lr_min : 0.0
+    - clip : 0.25
+    - clip_nonemb : False
+    - max_step : 20000
+    - batch_size : 20
+    - batch_chunk : 1
+    - tgt_len : 32
+    - eval_tgt_len : 32
+    - ext_len : 0
+    - mem_len : 0
+    - not_tied : False
+    - seed : 1111
+    - cuda : True
+    - adaptive : False
+    - div_val : 1
+    - pre_lnorm : False
+    - varlen : False
+    - multi_gpu : False
+    - log_interval : 200
+    - eval_interval : 1000
+    - work_dir : LM-TFM-ptb/20241204-131941
+    - restart : False
+    - restart_dir : 
+    - debug : False
+    - same_length : False
+    - attn_type : 0
+    - clamp_len : -1
+    - eta_min : 0.0
+    - gpu0_bsz : 1
+    - max_eval_steps : -1
+    - sample_softmax : -1
+    - patience : 0
+    - finetune_v2 : False
+    - finetune_v3 : False
+    - fp16 : False
+    - static_loss_scale : 1
+    - dynamic_loss_scale : False
+    - tied : True
+    - n_token : 10000
+    - n_all_param : 2112720
+    - n_nonemb_param : 822656
+    - self_attention_param : 295552
+====================================================================================================
+#params = 2112720
+#non emb params = 822656
+#self attention params = 295552
+| epoch   1 step      200 |    200 batches | lr 0.00025 | ms/batch 10.47 | loss  7.33 | ppl  1524.390
+| epoch   1 step      400 |    400 batches | lr 0.00025 | ms/batch  9.04 | loss  6.43 | ppl   619.721
+| epoch   1 step      600 |    600 batches | lr 0.000249 | ms/batch  9.12 | loss  6.30 | ppl   543.371
+| epoch   1 step      800 |    800 batches | lr 0.000249 | ms/batch  9.11 | loss  6.17 | ppl   476.250
+| epoch   1 step     1000 |   1000 batches | lr 0.000248 | ms/batch  8.94 | loss  6.03 | ppl   417.467
+----------------------------------------------------------------------------------------------------
+| Eval   1 at step     1000 | time: 10.27s | valid loss  5.90 | valid ppl   365.321
+----------------------------------------------------------------------------------------------------
+| epoch   1 step     1200 |   1200 batches | lr 0.000248 | ms/batch 13.86 | loss  5.99 | ppl   401.237
+| epoch   1 step     1400 |   1400 batches | lr 0.000247 | ms/batch  9.07 | loss  5.91 | ppl   367.171
+| epoch   2 step     1600 |    148 batches | lr 0.000246 | ms/batch  8.96 | loss  5.87 | ppl   354.903
+| epoch   2 step     1800 |    348 batches | lr 0.000245 | ms/batch  9.13 | loss  5.86 | ppl   349.032
+| epoch   2 step     2000 |    548 batches | lr 0.000244 | ms/batch  9.10 | loss  5.84 | ppl   345.047
+----------------------------------------------------------------------------------------------------
+| Eval   2 at step     2000 | time:  9.97s | valid loss   nan | valid ppl       nan
+----------------------------------------------------------------------------------------------------
+| epoch   2 step     2200 |    748 batches | lr 0.000243 | ms/batch 13.45 | loss   nan | ppl       nan
+| epoch   2 step     2400 |    948 batches | lr 0.000241 | ms/batch  8.86 | loss   nan | ppl       nan
+| epoch   2 step     2600 |   1148 batches | lr 0.00024 | ms/batch  9.02 | loss   nan | ppl       nan
+| epoch   2 step     2800 |   1348 batches | lr 0.000238 | ms/batch  9.01 | loss   nan | ppl       nan
+| epoch   3 step     3000 |     96 batches | lr 0.000236 | ms/batch  9.09 | loss   nan | ppl       nan
+----------------------------------------------------------------------------------------------------
+| Eval   3 at step     3000 | time:  9.60s | valid loss   nan | valid ppl       nan
+----------------------------------------------------------------------------------------------------
+| epoch   3 step     3200 |    296 batches | lr 0.000235 | ms/batch  9.99 | loss   nan | ppl       nan
+| epoch   3 step     3400 |    496 batches | lr 0.000233 | ms/batch  8.95 | loss   nan | ppl       nan
+| epoch   3 step     3600 |    696 batches | lr 0.000231 | ms/batch  8.99 | loss   nan | ppl       nan
+| epoch   3 step     3800 |    896 batches | lr 0.000228 | ms/batch  9.12 | loss   nan | ppl       nan
+| epoch   3 step     4000 |   1096 batches | lr 0.000226 | ms/batch  9.14 | loss   nan | ppl       nan
+----------------------------------------------------------------------------------------------------
+| Eval   4 at step     4000 | time:  9.56s | valid loss   nan | valid ppl       nan
+----------------------------------------------------------------------------------------------------
+| epoch   3 step     4200 |   1296 batches | lr 0.000224 | ms/batch 13.80 | loss   nan | ppl       nan
+| epoch   4 step     4400 |     44 batches | lr 0.000221 | ms/batch  9.02 | loss   nan | ppl       nan
+| epoch   4 step     4600 |    244 batches | lr 0.000219 | ms/batch  8.94 | loss   nan | ppl       nan
+| epoch   4 step     4800 |    444 batches | lr 0.000216 | ms/batch  9.00 | loss   nan | ppl       nan
+| epoch   4 step     5000 |    644 batches | lr 0.000213 | ms/batch  9.17 | loss   nan | ppl       nan
+----------------------------------------------------------------------------------------------------
+| Eval   5 at step     5000 | time:  9.93s | valid loss   nan | valid ppl       nan
+----------------------------------------------------------------------------------------------------
+| epoch   4 step     5200 |    844 batches | lr 0.000211 | ms/batch 13.58 | loss   nan | ppl       nan
+| epoch   4 step     5400 |   1044 batches | lr 0.000208 | ms/batch  9.03 | loss   nan | ppl       nan
+| epoch   4 step     5600 |   1244 batches | lr 0.000205 | ms/batch  9.09 | loss   nan | ppl       nan
+| epoch   4 step     5800 |   1444 batches | lr 0.000202 | ms/batch  8.97 | loss   nan | ppl       nan
+| epoch   5 step     6000 |    192 batches | lr 0.000198 | ms/batch  9.06 | loss   nan | ppl       nan
+----------------------------------------------------------------------------------------------------
+| Eval   6 at step     6000 | time: 10.02s | valid loss   nan | valid ppl       nan
+----------------------------------------------------------------------------------------------------
+| epoch   5 step     6200 |    392 batches | lr 0.000195 | ms/batch 13.92 | loss   nan | ppl       nan
+| epoch   5 step     6400 |    592 batches | lr 0.000192 | ms/batch  8.94 | loss   nan | ppl       nan
+| epoch   5 step     6600 |    792 batches | lr 0.000189 | ms/batch  9.07 | loss   nan | ppl       nan
+| epoch   5 step     6800 |    992 batches | lr 0.000185 | ms/batch  9.01 | loss   nan | ppl       nan
+| epoch   5 step     7000 |   1192 batches | lr 0.000182 | ms/batch  9.04 | loss   nan | ppl       nan
+----------------------------------------------------------------------------------------------------
+| Eval   7 at step     7000 | time: 10.00s | valid loss   nan | valid ppl       nan
+----------------------------------------------------------------------------------------------------
+| epoch   5 step     7200 |   1392 batches | lr 0.000178 | ms/batch 13.88 | loss   nan | ppl       nan
+| epoch   6 step     7400 |    140 batches | lr 0.000175 | ms/batch  9.09 | loss   nan | ppl       nan
+| epoch   6 step     7600 |    340 batches | lr 0.000171 | ms/batch  9.00 | loss   nan | ppl       nan
+| epoch   6 step     7800 |    540 batches | lr 0.000167 | ms/batch  9.07 | loss   nan | ppl       nan
+| epoch   6 step     8000 |    740 batches | lr 0.000164 | ms/batch  6.53 | loss   nan | ppl       nan
+----------------------------------------------------------------------------------------------------
+| Eval   8 at step     8000 | time:  9.28s | valid loss   nan | valid ppl       nan
+----------------------------------------------------------------------------------------------------
+| epoch   6 step     8200 |    940 batches | lr 0.00016 | ms/batch 12.69 | loss   nan | ppl       nan
+| epoch   6 step     8400 |   1140 batches | lr 0.000156 | ms/batch  9.18 | loss   nan | ppl       nan
+| epoch   6 step     8600 |   1340 batches | lr 0.000152 | ms/batch  8.91 | loss   nan | ppl       nan
+| epoch   7 step     8800 |     88 batches | lr 0.000148 | ms/batch  8.87 | loss   nan | ppl       nan
+| epoch   7 step     9000 |    288 batches | lr 0.000145 | ms/batch  8.98 | loss   nan | ppl       nan
+----------------------------------------------------------------------------------------------------
+| Eval   9 at step     9000 | time:  9.96s | valid loss   nan | valid ppl       nan
+----------------------------------------------------------------------------------------------------
+| epoch   7 step     9200 |    488 batches | lr 0.000141 | ms/batch 13.81 | loss   nan | ppl       nan
+| epoch   7 step     9400 |    688 batches | lr 0.000137 | ms/batch  8.97 | loss   nan | ppl       nan
+| epoch   7 step     9600 |    888 batches | lr 0.000133 | ms/batch  9.12 | loss   nan | ppl       nan
+| epoch   7 step     9800 |   1088 batches | lr 0.000129 | ms/batch  9.02 | loss   nan | ppl       nan
+| epoch   7 step    10000 |   1288 batches | lr 0.000125 | ms/batch  9.05 | loss   nan | ppl       nan
+----------------------------------------------------------------------------------------------------
+Exiting from training early
+====================================================================================================
+| End of training | test loss   nan | test ppl       nan
+====================================================================================================

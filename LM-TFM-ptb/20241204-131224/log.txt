@@ -1,0 +1,98 @@
+====================================================================================================
+    - data : /home/yuxuanxia/BTD-Transformer/data/ptb
+    - dataset : ptb
+    - n_layer : 2
+    - n_head : 1
+    - d_head : 32
+    - d_embed : 128
+    - d_model : 128
+    - d_inner : 1024
+    - dropout : 0.3
+    - dropatt : 0.0
+    - init : normal
+    - emb_init : normal
+    - init_range : 0.1
+    - emb_init_range : 0.01
+    - init_std : 0.02
+    - proj_init_std : 0.01
+    - optim : adam
+    - lr : 0.00025
+    - mom : 0.0
+    - scheduler : cosine
+    - warmup_step : 0
+    - decay_rate : 0.5
+    - lr_min : 0.0
+    - clip : 0.25
+    - clip_nonemb : False
+    - max_step : 20000
+    - batch_size : 20
+    - batch_chunk : 1
+    - tgt_len : 32
+    - eval_tgt_len : 32
+    - ext_len : 0
+    - mem_len : 0
+    - not_tied : False
+    - seed : 1111
+    - cuda : True
+    - adaptive : False
+    - div_val : 1
+    - pre_lnorm : False
+    - varlen : False
+    - multi_gpu : False
+    - log_interval : 200
+    - eval_interval : 1000
+    - work_dir : LM-TFM-ptb/20241204-131224
+    - restart : False
+    - restart_dir : 
+    - debug : False
+    - same_length : False
+    - attn_type : 0
+    - clamp_len : -1
+    - eta_min : 0.0
+    - gpu0_bsz : 1
+    - max_eval_steps : -1
+    - sample_softmax : -1
+    - patience : 0
+    - finetune_v2 : False
+    - finetune_v3 : False
+    - fp16 : False
+    - static_loss_scale : 1
+    - dynamic_loss_scale : False
+    - tied : True
+    - n_token : 10000
+    - n_all_param : 2112720
+    - n_nonemb_param : 822656
+    - self_attention_param : 295552
+====================================================================================================
+#params = 2112720
+#non emb params = 822656
+#self attention params = 295552
+| epoch   1 step      200 |    200 batches | lr 0.00025 | ms/batch  6.68 | loss  7.33 | ppl  1524.377
+| epoch   1 step      400 |    400 batches | lr 0.00025 | ms/batch  4.65 | loss  6.43 | ppl   619.778
+| epoch   1 step      600 |    600 batches | lr 0.000249 | ms/batch  5.99 | loss  6.30 | ppl   543.509
+| epoch   1 step      800 |    800 batches | lr 0.000249 | ms/batch  4.87 | loss  6.17 | ppl   476.406
+| epoch   1 step     1000 |   1000 batches | lr 0.000248 | ms/batch  4.93 | loss  6.03 | ppl   417.523
+----------------------------------------------------------------------------------------------------
+| Eval   1 at step     1000 | time:  5.74s | valid loss  5.90 | valid ppl   365.317
+----------------------------------------------------------------------------------------------------
+| epoch   1 step     1200 |   1200 batches | lr 0.000248 | ms/batch  6.75 | loss  5.99 | ppl   401.276
+| epoch   1 step     1400 |   1400 batches | lr 0.000247 | ms/batch  5.07 | loss  5.91 | ppl   367.133
+| epoch   2 step     1600 |    148 batches | lr 0.000246 | ms/batch  4.95 | loss  5.87 | ppl   354.819
+| epoch   2 step     1800 |    348 batches | lr 0.000245 | ms/batch  5.39 | loss  5.86 | ppl   349.040
+| epoch   2 step     2000 |    548 batches | lr 0.000244 | ms/batch  5.41 | loss  5.84 | ppl   345.051
+----------------------------------------------------------------------------------------------------
+| Eval   2 at step     2000 | time:  5.50s | valid loss   nan | valid ppl       nan
+----------------------------------------------------------------------------------------------------
+| epoch   2 step     2200 |    748 batches | lr 0.000243 | ms/batch  8.39 | loss   nan | ppl       nan
+| epoch   2 step     2400 |    948 batches | lr 0.000241 | ms/batch  4.66 | loss   nan | ppl       nan
+| epoch   2 step     2600 |   1148 batches | lr 0.00024 | ms/batch  5.33 | loss   nan | ppl       nan
+| epoch   2 step     2800 |   1348 batches | lr 0.000238 | ms/batch  4.80 | loss   nan | ppl       nan
+| epoch   3 step     3000 |     96 batches | lr 0.000236 | ms/batch  5.01 | loss   nan | ppl       nan
+----------------------------------------------------------------------------------------------------
+| Eval   3 at step     3000 | time:  5.65s | valid loss   nan | valid ppl       nan
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Exiting from training early
+====================================================================================================
+| End of training | test loss   nan | test ppl       nan
+====================================================================================================

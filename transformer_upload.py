@@ -8,8 +8,63 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import numpy as np
+from torch.utils.cpp_extension import load
 
+from torch.autograd import Function
+
+ein_module = load(
+    name="ein_module",
+    sources=["jit_32/ein.cpp", "jit_32/ein.cu"],
+    verbose=True
+)
+# ein_module = load(
+#     name="ein_module",
+#     sources=["jit_einsum/ein.cpp", "jit_einsum/ein.cu"],
+#     verbose=True
+# )
 sys.path.append('utils')
+
+from torch.autograd import Function
+
+class CustomEinsumFunction(Function):
+    @staticmethod
+    def forward(ctx, core_value, rw_head_q, w_head_k, w_head_v):
+        DIM_I = rw_head_q.shape[0]
+        DIM_B = rw_head_q.shape[1]
+        DIM_J = w_head_k.shape[0]
+        DIM_K = w_head_v.shape[0]
+        DIM_H = core_value.shape[0]
+        # Assume the dimensions are properly set up
+        outputs = torch.empty(DIM_I, DIM_B, DIM_J, DIM_K, device='cuda', dtype=torch.float32)
+        ein_module.torch_launch_ein_forward(core_value, rw_head_q, w_head_k, w_head_v, outputs, DIM_I, DIM_J, DIM_K, DIM_B, DIM_H)
+        ctx.save_for_backward(core_value, rw_head_q, w_head_k, w_head_v)
+        return outputs
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        core_value, rw_head_q, w_head_k, w_head_v = ctx.saved_tensors
+        DIM_I = rw_head_q.shape[0]
+        DIM_B = rw_head_q.shape[1]
+        DIM_J = w_head_k.shape[0]
+        DIM_K = w_head_v.shape[0]
+        DIM_H = core_value.shape[0]
+        grad_core_value = torch.zeros_like(core_value)
+        grad_rw_head_q = torch.zeros_like(rw_head_q)
+        grad_w_head_k = torch.zeros_like(w_head_k)
+        grad_w_head_v = torch.zeros_like(w_head_v)
+        ein_module.torch_launch_ein_backward(grad_output, 
+                                             core_value, rw_head_q, w_head_k, w_head_v, grad_core_value, 
+                                             grad_rw_head_q, grad_w_head_k, grad_w_head_v, 
+                                             DIM_I, DIM_J, DIM_K, DIM_B, DIM_H)
+        if grad_core_value.abs().sum() < 1e-5:
+            grad_core_value += 1e-5 if grad_core_value.sum() >= 0 else -1e-5
+        if grad_rw_head_q.abs().sum() < 1e-5:
+            grad_rw_head_q += 1e-5 if grad_rw_head_q.sum() >= 0 else -1e-5
+        if grad_w_head_k.abs().sum() < 1e-5:
+            grad_w_head_k += 1e-5 if grad_w_head_k.sum() >= 0 else -1e-5
+        if grad_w_head_v.abs().sum() < 1e-5:
+            grad_w_head_v += 1e-5 if grad_w_head_v.sum() >= 0 else -1e-5
+        return grad_core_value, grad_rw_head_q, grad_w_head_k, grad_w_head_v
 
 
 class PositionalEmbedding(nn.Module):
@@ -86,7 +141,6 @@ class MultiLinearAttn(nn.Module):
 
         self.qkv_net = nn.Linear(
             d_model, 3 * n_head * d_head, bias=False)  # 线性投影层
-
         self.drop = nn.Dropout(dropout)
         self.dropatt = nn.Dropout(dropatt)
 
@@ -215,18 +269,40 @@ class BlockTensorAttn(MultiLinearAttn):
         # 加偏置
         rw_head_q = w_head_q + r_w_bias  # qlen x bsz x n_head x d_head
         rr_head_q = w_head_q + r_r_bias
-
+        
+        dimension_I = rw_head_q.shape[0]
+        dimension_B = rw_head_q.shape[1]
+        dimension_J = w_head_k.shape[0]
+        dimension_K = w_head_v.shape[0]
         # 计算注意力分数
         full_matrixs = 0
+        output1 = torch.empty(dimension_I, dimension_B, dimension_J, dimension_K, device='cuda')
+        output2 = torch.empty(dimension_I, dimension_B, dimension_J, dimension_K, device='cuda')
         for i in range(self.core_nums):
-            full_matrix_1 = torch.einsum('h, ibh,jbh,kbh->ibjk',
-                                         [self.core_value[i], rw_head_q, w_head_k, w_head_v]).contiguous().view(qlen, bsz, -1)
+            dimension_H = self.core_value[i].shape[0]
+            # full_matrix_1 = torch.einsum('h, ibh,jbh,kbh->ibjk',
+            #                              [self.core_value[i], rw_head_q, w_head_k, w_head_v]).contiguous().view(qlen, bsz, -1)
+            # full_matrix_2 = torch.einsum('h, ibh,jh,kbh->ibjk',
+            #                              [self.core_value[i], rr_head_q, r_head_k, w_head_v]).contiguous().view(qlen, bsz, -1)
+            # ein_module.torch_launch_ein(self.core_value[i], rw_head_q, w_head_k, w_head_v, output1, dimension_I, dimension_B, dimension_J, dimension_K, dimension_H)
+            # full_matrix_1 = output1.contiguous().view(qlen, bsz, -1)
+            # ein_module.torch_launch_ein(self.core_value[i], rr_head_q, r_head_k, w_head_v, output2, dimension_I, dimension_B, dimension_J, dimension_K, dimension_H)
+            # full_matrix_2 = output2.contiguous().view(qlen, bsz, -1)
 
-            full_matrix_2 = torch.einsum('h, ibh,jh,kbh->ibjk',
-                                         [self.core_value[i], rr_head_q, r_head_k, w_head_v]).contiguous().view(qlen, bsz, -1)
+            ein_module.torch_launch_ein_forward(self.core_value[i], rw_head_q, w_head_k, w_head_v, output1, dimension_I, dimension_B, dimension_J, dimension_K, dimension_H)
+            full_matrix_1 = output1.contiguous().view(qlen, bsz, -1)
+            ein_module.torch_launch_ein_forward(self.core_value[i], rr_head_q, r_head_k, w_head_v, output2, dimension_I, dimension_B, dimension_J, dimension_K, dimension_H)
+            full_matrix_2 = output2.contiguous().view(qlen, bsz, -1)
+            # output1 = CustomEinsumFunction.apply(self.core_value[i], rw_head_q, w_head_k, w_head_v)
+            # output2 = CustomEinsumFunction.apply(self.core_value[i], rr_head_q, r_head_k, w_head_v)
+            # full_matrix_1 = output1.contiguous().view(qlen, bsz, -1)
+            # full_matrix_2 = output2.contiguous().view(qlen, bsz, -1)
+
             # 计算了基于相对位置嵌入的注意力分数。
             full_matrixs += (full_matrix_1 + full_matrix_2)
-
+        
+        # if not (dimension_I == 32 and dimension_B == 120 and dimension_J == 32 and dimension_K == 32 and dimension_H == 40):
+        #     print(f"dimension_I: {dimension_I}, dimension_B: {dimension_B}, dimension_J: {dimension_J}, dimension_K: {dimension_K}, dimension_H: {dimension_H}")
         # linear projection
         full_matrixs.mul_(1/self.core_nums)
         # 输出线性映射

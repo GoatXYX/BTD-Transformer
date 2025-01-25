@@ -1,25 +1,7 @@
-Brotli @ file:///croot/brotli-split_1714483155106/work
-certifi @ file:///croot/certifi_1725551672989/work/certifi
-charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
-filelock @ file:///croot/filelock_1700591183607/work
-gmpy2 @ file:///tmp/build/80754af9/gmpy2_1645455533097/work
-idna @ file:///croot/idna_1714398848350/work
-Jinja2 @ file:///croot/jinja2_1730902924303/work
-MarkupSafe @ file:///croot/markupsafe_1704205993651/work
+custom_cuda==0.0.0
 mkl-service==2.4.0
-mkl_fft @ file:///io/mkl313/mkl_fft_1730824109137/work
-mkl_random @ file:///io/mkl313/mkl_random_1730823916628/work
-mpmath @ file:///croot/mpmath_1690848262763/work
-networkx @ file:///croot/networkx_1717597493534/work
 numpy==1.26.4
-pillow @ file:///croot/pillow_1731594689713/work
-PySocks @ file:///home/builder/ci_310/pysocks_1640793678128/work
-PyYAML @ file:///croot/pyyaml_1728657952215/work
-requests @ file:///croot/requests_1730999120400/work
-sympy @ file:///croot/sympy_1724938189289/work
 torch==1.11.0+cu115
 torchaudio==0.11.0+cu115
 torchvision==0.12.0+cu115
 triton==3.1.0
-typing_extensions @ file:///croot/typing_extensions_1715268824938/work
-urllib3 @ file:///croot/urllib3_1727769808118/work

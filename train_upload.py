@@ -17,6 +17,8 @@ from transformer_upload import TensorizedTransformerLM
 from utils.exp_utils import create_exp_dir
 from utils.data_parallel import BalancedDataParallel
 
+from torch.utils.cpp_extension import load
+
 parser = argparse.ArgumentParser(
     description='PyTorch Transformer Language Model')
 parser.add_argument('--data', type=str, default='data/ptb',
@@ -589,6 +591,11 @@ def train():
         if train_step == args.max_step:
             break
 
+ein_module = load(
+    name="ein_module",
+    sources=["jit_einsum/ein.cpp", "jit_einsum/ein.cu"],
+    verbose=True
+)
 
 # Loop over epochs.
 train_step = 0
